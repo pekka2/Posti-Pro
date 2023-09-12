@@ -1,0 +1,480 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-shipping" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-shipping" class="form-horizontal">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-hinnasto" data-toggle="tab">{{ tab_hinnasto }}</a></li>
+            <li><a href="#tab-hinnasto1" data-toggle="tab">{{ tab_hinnasto_2 }}</a></li>
+            <li><a href="#tab-hinnasto2" data-toggle="tab">{{ tab_hinnasto_3 }}</a></li>
+            <li><a href="#tab-hinnasto3" data-toggle="tab">{{ tab_hinnasto_4 }}</a></li>
+            <li><a href="#tab-hinnasto4" data-toggle="tab">{{ tab_hinnasto_5 }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_status" id="input-status" class="form-control">
+                {% if shipping_posti_pro_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-tax-class">{{ entry_tax_class }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_tax_class_id" id="input-tax-class" class="form-control">
+                <option value="0">{{ text_none }}</option>
+                {% for tax_class in tax_classes %}
+                {% if tax_class.tax_class_id == shipping_posti_pro_tax_class_id %}
+                <option value="{{ tax_class.tax_class_id }}" selected="selected">{{ tax_class.title }}</option>
+                {% else %}
+                <option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-weight-class">{{ entry_weight_class }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_weight_class_id" id="input-weight-class" class="form-control">
+                <option value="0">{{ text_none }}</option>
+                {% for weight_class in weight_classes %}
+                {% if weight_class.weight_class_id == shipping_posti_pro_weight_class_id %}
+                <option value="{{ weight_class.weight_class_id }}" selected="selected">{{ weight_class.title }}</option>
+                {% else %}
+                <option value="{{ weight_class.weight_class_id }}">{{ weight_class.title }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-weight-class">{{ entry_length_class }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_length_class_id" id="input-weight-class" class="form-control">
+                <option value="0">{{ text_none }}</option>
+                {% for length_class in length_classes %}
+                {% if length_class.length_class_id == shipping_posti_pro_length_class_id %}
+                <option value="{{ length_class.length_class_id }}" selected="selected">{{ length_class.title }}</option>
+                {% else %}
+                <option value="{{ length_class.length_class_id }}">{{ length_class.title }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_geo_zone_id" id="input-geo-zone" class="form-control">
+                <option value="0">{{ text_all_zones }}</option>
+                {% for geo_zone in geo_zones %}
+                {% if geo_zone.geo_zone_id == shipping_posti_pro_geo_zone_id %}
+                <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                {% else %}
+                <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-kotijakelu">{{ entry_kotijakelu }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_kotijakelu_status" id="input-kotijakelu" class="form-control">
+                {% if shipping_posti_pro_kotijakelu_status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-koti-price"><span data-toggle="tooltip" title="{{ help_kotijakelu_price }}">{{ entry_kotijakelu_price }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_posti_pro_kotijakelu_price" value="{{ shipping_posti_pro_kotijakelu_price }}" placeholder="{{ entry_kotijakelu_price }}" id="input-koti-price" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-free-cargo">{{ entry_free_cargo }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_free_cargo" id="input-free-cargo" class="form-control">
+                {% if shipping_posti_pro_free_cargo %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-discount-cargo">{{ entry_discount_cargo }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_discount_cargo" id="input-discount-cargo" class="form-control">
+                {% if shipping_posti_pro_discount_cargo %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-discount-oreign_countries">{{ entry_discount_foreign_countries }}</label>
+            <div class="col-sm-10">
+              <select name="shipping_posti_pro_discount_foreign_countries" id="input-discount-foreign_countries" class="form-control">
+                {% if shipping_posti_pro_discount_foreign_countries %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-cargo-sum">{{ entry_cargo_sum }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_posti_pro_cargo_sum" value="{{ shipping_posti_pro_cargo_sum }}" placeholder="{{ entry_cargo_sum }}" id="input-cargo-sum" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-discount-cargo-percent">{{ entry_discount_cargo_percent }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_posti_pro_discount_cargo_percent" value="{{ shipping_posti_pro_discount_cargo_percent }}" placeholder="{{ entry_discount_cargo_percent }}" id="input-discount-cargo-percent" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-foreign-countries-sum">{{ entry_cargo_foreign_countries_sum }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_posti_pro_cargo_foreign_countries_sum" value="{{ shipping_posti_pro_cargo_foreign_countries_sum }}" placeholder="{{ entry_cargo_foreign_countries_sum }}" id="input-foreign-countries-sum" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-discount-cargo-percent">{{ entry_discount_foreign_countries_percent }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_posti_pro_discount_foreign_countries_percent" value="{{ shipping_posti_pro_discount_foreign_countries_percent }}" placeholder="{{ entry_discount_foreign_countries_percent }}" id="input-discount-cargo-percent" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-top">{{ entry_top }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_posti_pro_top" value="{{ shipping_posti_pro_top }}" placeholder="{{ entry_top }}" id="input-top" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="shipping_posti_pro_sort_order" value="{{ shipping_posti_pro_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+            </div>
+          </div>
+            </div>
+          <div class="tab-pane" id="tab-hinnasto">   
+              <div class="table-responsive">
+                <table id="ihinnasto" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row = 0 %}
+          {% if shipping_posti_pro_hinnasto %}
+            {% for hinta in shipping_posti_pro_hinnasto %}
+             <tr id="row{{ row }}">
+                    <td class="text-left"> <input type="text" name="shipping_posti_pro_hinnasto[{{ row }}][kg]" value="{{ hinta.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_posti_pro_hinnasto[{{ row }}][price]" value="{{ hinta.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row{{ row }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>         
+                   {% if hinta.error %}
+                   <tr><td></td><td> <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ hinta.error }}
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                     </div></td><td></td></tr>
+                   {% endif %}
+            {% set row = row + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-add" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row = {{ row }};
+  $('#button-add').click(function(){
+  html  = '<tr id="row' + row + '">';
+    html += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto[' + row + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+    html += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto[' + row + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html += '  <td class="text-left"><button type="button" onclick="$(\'#row' + row + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html += '</tr>';
+
+  $('#tab-hinnasto tbody').append(html);
+
+  row++;
+  });
+//--></script>
+          </div>
+          <div class="tab-pane" id="tab-hinnasto1">
+          {{ text_hinnasto_2_kuvaus }}
+              <div class="table-responsive">
+                <table id="hinnasto-2" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row2 = 0 %}
+          {% if shipping_posti_pro_hinnasto_countrygroup_1 %}
+            {% for hinta2 in shipping_posti_pro_hinnasto_countrygroup_1 %}
+             <tr id="row2-{{ row2 }}">
+                    <td class="text-left"> <input type="text" name="shipping_posti_pro_hinnasto_countrygroup_1[{{ row2 }}][kg]" value="{{ hinta2.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_1[{{ row2 }}][price]" value="{{ hinta2.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row2-{{ row2 }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>         
+                   {% if hinta2.error %}
+                   <tr><td></td><td> <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ hinta2.error }}
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                     </div></td><td></td></tr>
+                   {% endif %}   
+            {% set row2 = row2 + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-posti" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row2 = {{ row2 }};
+  $('#button-posti').click(function(){
+  html2  = '<tr id="row2-' + row2 + '">';
+  html2 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_1[' + row2 + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html2 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_1[' + row2 + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html2 += '  <td class="text-left"><button type="button" onclick="$(\'#row2-' + row2 + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html2 += '</tr>';
+
+  $('#tab-hinnasto1 tbody').append(html2);
+
+    row2++;
+  });
+//--></script>
+          </div>
+          <div class="tab-pane" id="tab-hinnasto2">
+          {{ text_hinnasto_3_kuvaus }}
+              <div class="table-responsive">
+                <table id="hinnasto-2" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row3 = 0 %}
+          {% if shipping_posti_pro_hinnasto_countrygroup_2 %}
+            {% for hinta3 in shipping_posti_pro_hinnasto_countrygroup_2 %}
+             <tr id="row3-{{ row3 }}">
+                    <td class="text-left"> <input type="text" name="shipping_posti_pro_hinnasto_countrygroup_2[{{ row3 }}][kg]" value="{{ hinta3.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_2[{{ row3 }}][price]" value="{{ hinta3.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row3-{{ row3 }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>         
+                   {% if hinta3.error %}
+                   <tr><td></td><td> <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ hinta3.error }}
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                     </div></td><td></td></tr>
+                   {% endif %}
+            {% set row3 = row3 + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-posti2" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row3 = {{ row3 }};
+  $('#button-posti2').click(function(){
+  html3  = '<tr id="row3-' + row3 + '">';
+  html3 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_2[' + row3 + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html3 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_2[' + row3 + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html3 += '  <td class="text-left"><button type="button" onclick="$(\'#row3-' + row3 + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html3 += '</tr>';
+
+  $('#tab-hinnasto2 tbody').append(html3);
+
+    row3++;
+  });
+//--></script>
+          </div>
+          <div class="tab-pane" id="tab-hinnasto3">
+          {{ text_hinnasto_4_kuvaus }}
+              <div class="table-responsive">
+                <table id="hinnasto-2" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row4 = 0 %}
+          {% if shipping_posti_pro_hinnasto_countrygroup_3 %}
+            {% for hinta4 in shipping_posti_pro_hinnasto_countrygroup_3 %}
+             <tr id="row4-{{ row4 }}">
+                    <td class="text-left"> <input type="text" name="shipping_posti_pro_hinnasto_countrygroup_3[{{ row4 }}][kg]" value="{{ hinta4.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_3[{{ row4 }}][price]" value="{{ hinta4.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row4-{{ row4 }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>         
+                   {% if hinta4.error %}
+                   <tr><td></td><td> <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ hinta4.error }}
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                     </div></td><td></td></tr>
+                   {% endif %}
+            {% set row4 = row4 + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-posti3" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row4 = {{ row4 }};
+  $('#button-posti3').click(function(){
+  html4  = '<tr id="row4-' + row4 + '">';
+  html4 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_3[' + row4 + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html4 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_3[' + row4 + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html4 += '  <td class="text-left"><button type="button" onclick="$(\'#row4-' + row4 + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html4 += '</tr>';
+
+  $('#tab-hinnasto3 tbody').append(html4);
+
+    row4++;
+  });
+//--></script>
+          </div>
+          <div class="tab-pane" id="tab-hinnasto4">
+          {{ text_hinnasto_5_kuvaus }}
+              <div class="table-responsive">
+                <table id="hinnasto-2" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left col-sm-2">{{ column_kg }}</td>
+                      <td class="text-left col-sm-8">{{ column_price }}</td>
+                      <td class="text-left col-sm-2"></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+          {% set row5 = 0 %}
+          {% if shipping_posti_pro_hinnasto_countrygroup_4 %}
+            {% for hinta5 in shipping_posti_pro_hinnasto_countrygroup_4 %}
+             <tr id="row5-{{ row5 }}">
+                    <td class="text-left"> <input type="text" name="shipping_posti_pro_hinnasto_countrygroup_4[{{ row5 }}][kg]" value="{{ hinta5.kg }}" class="form-control" /></td>
+                    <td><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_4[{{ row5 }}][price]" value="{{ hinta5.price }}" class="form-control" /></td>
+                    <td class="text-left"><button type="button" onclick="$('#row5-{{ row5 }}').remove()" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td></tr>         
+                   {% if hinta5.error %}
+                   <tr><td></td><td> <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ hinta5.error }}
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                     </div></td><td></td></tr>
+                   {% endif %}   
+            {% set row5 = row5 + 1 %}
+            {% endfor %}
+          {% endif %}
+            </tbody>
+                  <tfoot>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td class="text-left"><button type="button" id="button-posti4" data-toggle="tooltip" title="{{ button_weight_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+            </div>
+
+  <script type="text/javascript"><!--
+   var row5 = {{ row5 }};
+  $('#button-posti4').click(function(){
+  html5  = '<tr id="row5-' + row5 + '">';
+  html5 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_4[' + row5 + '][kg]" value="" placeholder="{{ column_kg }}" class="form-control" /></td>';
+  html5 += '  <td class="text-right"><input type="text" name="shipping_posti_pro_hinnasto_countrygroup_4[' + row5 + '][price]" value="" placeholder="{{ column_price }}" class="form-control" /></td>';
+  html5 += '  <td class="text-left"><button type="button" onclick="$(\'#row5-' + row5 + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+  html5 += '</tr>';
+
+  $('#tab-hinnasto4 tbody').append(html5);
+
+    row5++;
+  });
+//--></script>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }} 
