@@ -124,7 +124,6 @@ class ModelExtensionShippingSmartPost extends Model {
 		    $hinnasto = $this->config->get('shipping_smartpost_hinnasto');
 		    foreach($hinnasto as $result){
 			    if($weight <= $result['kg']){
-			    	echo $weight .' ' .$result['kg'] .'<bR>';
 				    return $result['price'];
 			    }
 		    }
